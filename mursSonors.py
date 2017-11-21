@@ -6,7 +6,7 @@ from random import randint
 pygame.mixer.init()
 
 GPIO.setmode(GPIO.BOARD)
-mypins =  range(11, 14)
+mypins =  range(11, 14) # 11,12,13
 
 print 'starting: mursSonors'
 print 'gpio version is: ', GPIO.VERSION
@@ -28,13 +28,14 @@ try:
                 pygame.mixer.music.play()
                 while pygame.mixer.music.get_busy() == True:
                     continue
-
+                break
+                
             else:
                 pass
                 print 'Pin', PIR_PIN, 'is LOW'    
 
         print '-----'
-        time.sleep(8)
+        time.sleep(2)
 
 except KeyboardInterrupt:
     print 'cleaning up and exiting'
