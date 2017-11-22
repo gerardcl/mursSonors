@@ -1,12 +1,14 @@
+#!/usr/bin/python
 import RPi.GPIO as GPIO
 import time
 import pygame
 from random import randint
 
-pygame.mixer.init()
+pygame.mixer.init(frequency=48000, size=-16, channels=1, buffer=4096)
 
 GPIO.setmode(GPIO.BOARD)
-mypins =  range(11, 14) # 11,12,13
+mypins =  range(11, 14)
+totalTracks = 21
 
 print 'starting: mursSonors'
 print 'gpio version is: ', GPIO.VERSION
@@ -22,14 +24,30 @@ try:
             
             if read_input:
                 print 'Pin', PIR_PIN, 'is HIGH!'
-                trackPath = 'sonsMur/track00' + str(randint(1, 9)) + '.mp3'
+
+                trackNum = randint(1,totalTracks)
+                trackString = ''
+                if trackNum > 9:
+                    trackString = str(trackNum)
+                else:
+                    trackString = '0' + str(trackNum)
+
+                pygame.mixer.music.load('/home/pi/mursSonors/sonsMur/intro-' + str(randint(1,2))  + '.mp3')
+                pygame.mixer.music.play()
+                while pygame.mixer.music.get_busy() == True:
+                    continue
+
+                time.sleep(2)
+
+                trackPath = '/home/pi/mursSonors/sonsMur/track0' + trackString + '.mp3'
                 print 'playing: ', trackPath
                 pygame.mixer.music.load(trackPath)
                 pygame.mixer.music.play()
                 while pygame.mixer.music.get_busy() == True:
                     continue
-                break
                 
+                break
+
             else:
                 pass
                 print 'Pin', PIR_PIN, 'is LOW'    
